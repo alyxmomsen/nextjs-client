@@ -63,7 +63,7 @@ export default function News() {
                 newsDispatch({ type: "removeByID", payload: value });
               })(elem.id);
             }}
-            key={/* elem.id */ i}
+            key={elem.id}
           >
             <br />
             <br />
