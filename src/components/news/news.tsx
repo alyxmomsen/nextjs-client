@@ -1,35 +1,37 @@
-"use client";
-
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const token =
-  "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI2NjFmOGE4ODRjMTk1MjVlZThiMDc0NGQiLCJpYXQiOjE3MTMzNDk1NjB9.GPKsqYsLSXJf_DsnmrL5yWDs1nIU_xGz8EDs_4pi7sc";
+export default async function News() {
+  const data = await getNews();
 
-export function GetNews() {
-  const state = useState(0);
+  console.log({ data });
 
-  useEffect(() => {
-    axiosRun().then((res) => {
-      console.log(res);
-    });
-  }, []);
-
-  return <div>news</div>;
+  return (
+    <div>
+      <h2>NEWS ONLY YOURE</h2>
+      <section>
+        content:
+        {data.status &&
+          data.payload.map((elem) => (
+            <div>
+              <div>{elem.title}</div>
+              <div>{elem.body}</div>
+            </div>
+          ))}
+      </section>
+    </div>
+  );
 }
 
-async function axiosRun() {
-  console.log("axios run");
+async function getNews() {
+  const response = await fetch("http://localhost:3001/api/news", {
+    next: {
+      revalidate: 10,
+    },
+  });
 
-  const response = await axios
-    .get("http://www.localhost:3001/api/account", {
-      headers: {
-        Authorization: token,
-      },
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-
-  return response;
+  return (await response.json()) as {
+    status: boolean;
+    payload: { title: string; body: string }[];
+  };
 }

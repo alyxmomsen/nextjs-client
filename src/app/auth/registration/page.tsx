@@ -1,6 +1,5 @@
 "use client";
 
-import { GetNews } from "@/components/news/news";
 import axios from "axios";
 import Image from "next/image";
 import { ReducerState, useReducer, useState } from "react";
@@ -26,58 +25,64 @@ export default function Registration() {
     initState,
   );
 
-  const [response , setResponse] = useState(false);
+  const [response, setResponse] = useState(false);
 
   return (
     <div>
       <h1>Registration</h1>
-      <div>{response ? <span>ok</span>: null}</div>
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        onSubmitHandler({...state}).then(response => {
+      <div>{response ? <span>ok</span> : null}</div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmitHandler({ ...state }).then((response) => {
             setResponse(response ? true : false);
             console.log(response);
-        });
-      }}>
+          });
+        }}
+      >
         <input
+          placeholder="NAME"
           onInput={(e) =>
             dispatch({ type: "", payload: { name: e.currentTarget.value } })
           }
           type="text"
           value={state.name}
         />
+        <br/><br/>
         <input
+          placeholder="EMAIL"
           onInput={(e) =>
             dispatch({ type: "", payload: { email: e.currentTarget.value } })
           }
           type="text"
           value={state.email}
-        />
+        /><br/><br/>
         <input
+          placeholder="PASSWORD"
           onInput={(e) =>
             dispatch({ type: "", payload: { password: e.currentTarget.value } })
           }
           type="text"
           value={state.password}
         />
-        <input type="submit"/>
+        <input type="submit" />
       </form>
     </div>
   );
 }
 
-async function onSubmitHandler (formdata:formDataState) {
+async function onSubmitHandler(formdata: formDataState) {
+  const data = formdata;
 
-    const data = formdata ;
-
-    const resp0nse = await axios.post('http://www.localhost:3001/api/registration' , {
-        username:data.name ,
-        email:data.email ,
-        password:data.password ,
-    }).catch(er => {
-        console.log({er});
+  const resp0nse = await axios
+    .post("http://www.localhost:3001/api/registration", {
+      username: data.name,
+      email: data.email,
+      password: data.password,
+    })
+    .catch((er) => {
+      console.log({ er });
     });
 
-    return resp0nse ;
-
+  return resp0nse;
 }
