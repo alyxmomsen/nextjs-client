@@ -1,10 +1,14 @@
 "use client";
 
+const buttoTailWindStyle =
+  "text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-2.5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800";
+
 import axios from "axios";
 import { constrainedMemory } from "process";
 import { useEffect, useLayoutEffect, useState } from "react";
 import Router from "next/router";
 import { useRouter } from "next/navigation";
+import tailwindTemplates from "@/styles/taliwind-templates";
 
 interface UserData {
   username: string;
@@ -47,17 +51,18 @@ export default function AccountData() {
   }, []);
 
   return (
-    <div>
+    <div className={tailwindTemplates.wrapper}>
       <header>
         Hello ,{" "}
         <span style={{ fontWeight: "bold", color: "Highlight" }}>
-          {userData?.username}
+        {userData?.username}
         </span>{" "}
         you are
         {!isAuth ? <span> NOT </span> : " "}
-        AUTHRIZED
+        AUTHRIZED<span> </span>
         {isAuth ? (
           <button
+            className={tailwindTemplates.button}
             onClick={() => {
               localStorage.clear();
               router.push("/");
@@ -70,14 +75,10 @@ export default function AccountData() {
       <section>
         {isAuth ? (
           <div style={{ display: "flex", flexDirection: "column", gap: "9px" }}>
-            <h2>user name:</h2>
-            <span style={{ fontWeight: "bold", color: "Highlight" }}>
-              {userData?.username}
-            </span>
-            <h2>email</h2>
-            <span style={{ fontWeight: "bold", color: "Highlight" }}>
-              {userData?.email}
-            </span>
+            <label htmlFor="user-name-readonly-input">USERNAME</label>
+            <input id="user-name-readonly-input" className={tailwindTemplates.inputText + " w-min"} type="text" readOnly value={userData?.username} />
+            <label htmlFor="email-readonly-input">EMAIL</label>
+            <input id="email-readonly-input" className={tailwindTemplates.inputText + " w-min"} type="text" readOnly value={userData?.email} />
           </div>
         ) : (
           <div></div>

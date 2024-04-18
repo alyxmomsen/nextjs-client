@@ -1,3 +1,6 @@
+"use client";
+
+import tailwindTemplates from "@/styles/taliwind-templates";
 import Link from "next/link";
 
 const routes = [
@@ -29,12 +32,17 @@ const routes = [
 
 export default function NavBar() {
   return (
-    <div style={{ display: "flex", gap: "9px" }}>
-      {routes.map((elem) => (
-        <Link href={elem.path} key={elem.id}>
-          {elem.name}
-        </Link>
-      ))}
+    <div
+      className={tailwindTemplates.wrapper + " br-0"}
+      style={{ display: "flex", gap: "9px" }}
+    >
+      {routes
+        .filter((elem) => true)
+        .map((elem) => (
+          <Link href={elem.path} key={elem.id}>
+            {elem.name}
+          </Link>
+        ))}
     </div>
   );
 }

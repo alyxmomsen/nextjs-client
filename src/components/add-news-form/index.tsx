@@ -1,5 +1,7 @@
 "use client";
 
+import tailwindTemplates from "@/styles/taliwind-templates";
+
 import axios from "axios";
 import { useEffect, useMemo, useReducer, useState } from "react";
 
@@ -44,18 +46,21 @@ export default function AddNewsForm() {
   }, [state]);
 
   return (
-    <div>
-      <h2>ADD NEWS FORM</h2>
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        const response = postNews(state);
-        response.then(state => {
+    <div className={tailwindTemplates.wrapper + " my-9"}>
+      <h2 className="text-2xl font-extrabold dark:text-white">ADD NEWS FORM</h2>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const response = postNews(state);
+          response.then((state) => {
             console.log(state);
-        });
-      }}>
-        <input value={''} type="submit" /><br/><br/>
+          });
+        }}
+      >
         <input
-          type="string"
+
+          className={tailwindTemplates.inputText + ' mt-9'}
+          type="text"
           placeholder="title"
           value={state.title}
           onInput={(e) =>
@@ -65,10 +70,12 @@ export default function AddNewsForm() {
             })
           }
         />
-        {brdiv}
-        <input
-          type="string"
-          placeholder="body"
+        <br/ >
+        <textarea
+          rows={4}
+          cols={100}
+          className={tailwindTemplates.textArea}
+          placeholder="Write your news here..."
           value={state.body}
           onInput={(e) =>
             dispatchState({
@@ -77,7 +84,7 @@ export default function AddNewsForm() {
             })
           }
         />
-        {brdiv}
+        <br />
         <input
           type="datetime-local"
           placeholder="date"
@@ -90,21 +97,27 @@ export default function AddNewsForm() {
             })
           }
         />
+        <br />
+        <button className={tailwindTemplates.button + ' mt-9'} type="submit">POST THE NEWS</button>
       </form>
     </div>
   );
 }
 
-async function postNews (data:THeForm) {
-
-    const response =await axios.post('http://localhost:3001/api/news' , {...data} , {
-        headers:{
-            Authorization:localStorage.getItem('access_token') ,
-        }
-    }).catch(err => {
-        console.log({err})
+async function postNews(data: THeForm) {
+  const response = await axios
+    .post(
+      "http://localhost:3001/api/news",
+      { ...data },
+      {
+        headers: {
+          Authorization: localStorage.getItem("access_token"),
+        },
+      },
+    )
+    .catch((err) => {
+      console.log({ err });
     });
 
-    return response ;
-
+  return response;
 }

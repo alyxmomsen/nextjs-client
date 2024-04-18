@@ -4,6 +4,9 @@ import axios from "axios";
 import Image from "next/image";
 import { ReducerState, useReducer, useState } from "react";
 
+const inputClassName =
+  "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
+
 interface formDataState {
   name: string;
   password: string;
@@ -28,8 +31,10 @@ export default function Registration() {
   const [response, setResponse] = useState(false);
 
   return (
-    <div>
-      <h1>Registration</h1>
+    <div className="p-9">
+      <h3 className="text-4xl font-extrabold dark:text-white mb-9">
+        Registration
+      </h3>
       <div>{response ? <span>ok</span> : null}</div>
       <form
         onSubmit={(e) => {
@@ -41,6 +46,7 @@ export default function Registration() {
         }}
       >
         <input
+          className={inputClassName}
           placeholder="NAME"
           onInput={(e) =>
             dispatch({ type: "", payload: { name: e.currentTarget.value } })
@@ -48,21 +54,24 @@ export default function Registration() {
           type="text"
           value={state.name}
         />
-        <br/><br/>
+        <br />
         <input
+          className={inputClassName}
           placeholder="EMAIL"
           onInput={(e) =>
             dispatch({ type: "", payload: { email: e.currentTarget.value } })
           }
           type="text"
           value={state.email}
-        /><br/><br/>
+        />
+        <br />
         <input
+          className={inputClassName}
           placeholder="PASSWORD"
           onInput={(e) =>
             dispatch({ type: "", payload: { password: e.currentTarget.value } })
           }
-          type="text"
+          type="password"
           value={state.password}
         />
         <input type="submit" />
