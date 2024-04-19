@@ -14,7 +14,7 @@ interface formDataState {
 }
 
 const initState: formDataState = {
-  name: "hello",
+  name: "",
   password: "",
   email: "",
 };
@@ -28,20 +28,23 @@ export default function Registration() {
     initState,
   );
 
-  const [response, setResponse] = useState(false);
+  const [registrationStatus, setRegistrationStatus] = useState(false);
 
   return (
     <div className="p-9">
       <h3 className="text-4xl font-extrabold dark:text-white mb-9">
         Registration
       </h3>
-      <div>{response ? <span>ok</span> : null}</div>
+      <div>{registrationStatus ? <span>ok</span> : null}</div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           onSubmitHandler({ ...state }).then((response) => {
-            setResponse(response ? true : false);
-            console.log(response);
+
+            const {status , message} = response?.data ;
+
+            setRegistrationStatus(status ? true : false);
+            console.log({status , message});
           });
         }}
       >

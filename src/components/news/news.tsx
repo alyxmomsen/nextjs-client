@@ -21,6 +21,7 @@ export default async function News() {
           data.payload.map((elem) => (
             <>
               <div className={newsTW}>
+                <img /* width={200} */ src={elem.image_url} />
                 <h3>author: {elem.authorUserName}</h3>
                 <h5 className={ntwheader}>{elem.title}</h5>
                 <p>{elem.body}</p>
@@ -42,6 +43,11 @@ async function getNews() {
 
   return (await response.json()) as {
     status: boolean;
-    payload: { title: string; body: string , authorUserName:string }[];
+    payload: {
+      title: string;
+      body: string;
+      authorUserName: string;
+      image_url: string;
+    }[];
   };
 }

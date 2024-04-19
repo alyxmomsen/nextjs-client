@@ -55,7 +55,7 @@ export default function AccountData() {
       <header>
         Hello ,{" "}
         <span style={{ fontWeight: "bold", color: "Highlight" }}>
-        {userData?.username}
+          {userData?.username}
         </span>{" "}
         you are
         {!isAuth ? <span> NOT </span> : " "}
@@ -76,9 +76,21 @@ export default function AccountData() {
         {isAuth ? (
           <div style={{ display: "flex", flexDirection: "column", gap: "9px" }}>
             <label htmlFor="user-name-readonly-input">USERNAME</label>
-            <input id="user-name-readonly-input" className={tailwindTemplates.inputText + " w-min"} type="text" readOnly value={userData?.username} />
+            <input
+              id="user-name-readonly-input"
+              className={tailwindTemplates.inputText + " w-min"}
+              type="text"
+              readOnly
+              value={userData?.username}
+            />
             <label htmlFor="email-readonly-input">EMAIL</label>
-            <input id="email-readonly-input" className={tailwindTemplates.inputText + " w-min"} type="text" readOnly value={userData?.email} />
+            <input
+              id="email-readonly-input"
+              className={tailwindTemplates.inputText + " w-min"}
+              type="text"
+              readOnly
+              value={userData?.email}
+            />
           </div>
         ) : (
           <div></div>
