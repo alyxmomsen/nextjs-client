@@ -1,5 +1,7 @@
 "use client";
 
+import React from 'react'
+
 import tailwindTemplates from "@/styles/taliwind-templates";
 
 import axios from "axios";
@@ -17,29 +19,12 @@ const reducer = (
 ) => ({ ...state, ...action.payload });
 
 export default function AddNewsForm() {
-  const date = new Date();
 
   const [state, dispatchState] = useReducer(reducer, {
     title: "",
     body: "",
     date_to_post: new Date(Date.now()).toISOString(),
   });
-
-  const [brdiv] = useState(
-    useMemo(
-      () =>
-        ((value) => (
-          <div>
-            {Array(value)
-              .fill(0)
-              .map((elem) => (
-                <br />
-              ))}
-          </div>
-        ))(2),
-      [],
-    ),
-  );
 
   useEffect(() => {
     console.log({ state });
@@ -57,8 +42,8 @@ export default function AddNewsForm() {
           });
         }}
       >
+        <input type="file" /* accept='image' */name='my-file' id='my-file-to-upload' />
         <input
-
           className={tailwindTemplates.inputText + ' mt-9'}
           type="text"
           placeholder="title"
