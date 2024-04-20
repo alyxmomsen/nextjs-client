@@ -30,7 +30,7 @@ export default function Registration() {
   );
 
   const [registrationStatus, setRegistrationStatus] = useState(false);
-  const [status , setStatus] = useState('');
+  const [status, setStatus] = useState("");
 
   return (
     <div className="p-9">
@@ -42,17 +42,14 @@ export default function Registration() {
         onSubmit={(e) => {
           e.preventDefault();
           onSubmitHandler({ ...state }).then((response) => {
+            console.log({ response });
 
-            console.log({response});
-
-
-            const {status , message} = response.data ;
-            
+            const { status, message } = response.data;
 
             setStatus(message);
 
             setRegistrationStatus(status ? true : false);
-            console.log({status , message});
+            console.log({ status, message });
           });
         }}
       >
@@ -86,7 +83,9 @@ export default function Registration() {
           value={state.password}
         />
         <br />
-        <button className={tailwindTemplates.button} type="submit">REGISTRATION</button>
+        <button className={tailwindTemplates.button} type="submit">
+          REGISTRATION
+        </button>
       </form>
     </div>
   );
@@ -103,10 +102,10 @@ async function onSubmitHandler(formdata: formDataState) {
     })
     .catch((er) => {
       console.log({ er });
-      return {data:{status:false , message:er.response.data.message}}
+      return { data: { status: false, message: er.response.data.message } };
     });
 
-    console.log({resp0nse});
+  console.log({ resp0nse });
 
   return resp0nse;
 }

@@ -29,35 +29,32 @@ export default function Registration() {
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
+    const access_token = localStorage.getItem("access_token");
 
-    const access_token = localStorage.getItem('access_token');
+    if (access_token) {
+      checkIfauth(access_token)
+        .then((data) => {
+          if (data.status) {
+            setIsAuth(true);
+          } else {
+            setIsAuth(true);
+          }
 
-    if(access_token) {
-      checkIfauth(access_token).then(data => {
-
-        if(data.status) {
-          setIsAuth(true);
-        }
-        else {
-          setIsAuth(true);
-        }
-
-
-        console.log(data);
-      }).catch(err => {
-        console.log({err})
-      });
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log({ err });
+        });
     }
-
 
     console.log(access_token);
   }, [isAuth]);
 
   return (
     <div className="p-9">
-        <h2 className="text-4xl font-extrabold dark:text-white mb-9">
-          LOGIN FORM
-        </h2>
+      <h2 className="text-4xl font-extrabold dark:text-white mb-9">
+        LOGIN FORM
+      </h2>
       <div>
         {isAuth ? (
           <button
@@ -137,17 +134,22 @@ async function onSubmitHandler(formdata: formDataState) {
   return resp0nse;
 }
 
+async function checkIfauth(token: string) {
+  const response = await axios.post<{
+    status: boolean;
+    message: string;
+    payload: {
+      username: string;
+    };
+  }>(
+    "http://localhost:3001/api/auth",
+    {},
+    {
+      headers: {
+        Authorization: token,
+      },
+    },
+  );
 
-async function checkIfauth (token:string) {
-
-  const response = await axios.post<{status:boolean , message:string , payload:{
-    username:string
-  }}>('http://localhost:3001/api/auth' , {} , {
-    headers:{
-      Authorization:token ,
-    }
-  });
-
-  return response ;
-
+  return response;
 }

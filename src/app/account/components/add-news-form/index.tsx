@@ -6,6 +6,7 @@ import tailwindTemplates from "@/styles/taliwind-templates";
 
 import axios from "axios";
 import { useEffect, useMemo, useReducer, useState } from "react";
+import MyPosts from "@/app/account/components/my-posts";
 
 interface THeForm {
   file: File | null;
@@ -29,41 +30,50 @@ export default function AddNewsForm() {
     if_delayed_publication: false,
   });
 
-  const [uploadProgress , setUploadProgress] = useState(0);
-  const [isUploadFormActivated , setIsUploadFormActivated] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploadFormActivated, setIsUploadFormActivated] = useState(false);
 
-
-  useEffect(() => {
-    console.log({ state });
-  }, [state]);
+  useEffect(() => {}, [state.date_to_post]);
 
   useEffect(() => {
-
-    if(isUploadFormActivated) {
+    if (isUploadFormActivated) {
       // setUploadProgress(0);
     }
-
-  } , [isUploadFormActivated]);
+  }, [isUploadFormActivated]);
 
   useEffect(() => {
-    console.log({uploadProgress});
-
-    if(uploadProgress >= 100) {
-      dispatchState({type:'update' , payload:{body:'' , date_to_post:'' ,file:null , if_delayed_publication:false , title:''}});
+    if (uploadProgress >= 100) {
+      dispatchState({
+        type: "update",
+        payload: {
+          body: "",
+          date_to_post: "",
+          file: null,
+          if_delayed_publication: false,
+          title: "",
+        },
+      });
       // setIsUploadFormActivated(false);
     }
-
-  } , [uploadProgress]);
+  }, [uploadProgress]);
 
   return (
     <div className={tailwindTemplates.wrapper + " my-9"}>
       <h2 className="text-2xl font-extrabold dark:text-white">ADD NEWS FORM</h2>
-      <button className={tailwindTemplates.button} onClick={() => {setIsUploadFormActivated(current => !current)}}>{isUploadFormActivated?'ROLL UP':'ADD NEWS'}</button>
-      {
-        isUploadFormActivated && (<form
+      <button
+        className={tailwindTemplates.button}
+        onClick={() => {
+          setIsUploadFormActivated((current) => !current);
+        }}
+      >
+        {isUploadFormActivated ? "ROLL UP" : "ADD NEWS"}
+      </button>
+      {isUploadFormActivated && (
+        <form
           onSubmit={(e) => {
             e.preventDefault();
-            const response = postNews(state , setUploadProgress);
+
+            const response = postNews(state, setUploadProgress);
             response.then((state) => {
               console.log(state);
             });
@@ -115,41 +125,58 @@ export default function AddNewsForm() {
             onChange={() => {
               dispatchState({
                 type: "update",
-                payload: { if_delayed_publication: !state.if_delayed_publication },
+                payload: {
+                  if_delayed_publication: !state.if_delayed_publication,
+                },
               });
             }}
             type="checkbox"
             checked={state.if_delayed_publication}
-          /><span> </span><label htmlFor="dalayed-publication-checkbox">dalayed publication</label><br />
-          {
-            state.if_delayed_publication && (<input
+          />
+          <span> </span>
+          <label htmlFor="dalayed-publication-checkbox">
+            dalayed publication
+          </label>
+          <br />
+          {state.if_delayed_publication && (
+            <input
               type="datetime-local"
               placeholder="date"
-              onChange={(e) =>
+              onChange={(e) => {
+                const dateToPost = new Date(
+                  e.currentTarget.value,
+                ).toISOString();
+
                 dispatchState({
                   type: "update",
                   payload: {
-                    date_to_post: new Date(e.currentTarget.value).toISOString(),
+                    date_to_post: dateToPost /* e.currentTarget.value */,
                   },
-                })
-              }
-            />)
-          }
-          
+                });
+              }}
+            />
+          )}
+
           <br />
-          
+
           <button className={tailwindTemplates.button + " mt-9"} type="submit">
             POST THE NEWS
           </button>
-        </form>)
-      }
-      <progress value={uploadProgress}/><br />
-          {uploadProgress >= 100 && <h3>{'the news is published'.toUpperCase()}</h3>}
+        </form>
+      )}
+      <progress value={uploadProgress} />
+      <br />
+      {uploadProgress >= 100 && (
+        <h3>{"the news is published".toUpperCase()}</h3>
+      )}
     </div>
   );
 }
 
-async function postNews(data: THeForm , setProgress:React.Dispatch<React.SetStateAction<number>>) {
+async function postNews(
+  data: THeForm,
+  setProgress: React.Dispatch<React.SetStateAction<number>>,
+) {
   const formdata = new FormData();
   const file = data.file;
   if (file) {
@@ -166,13 +193,11 @@ async function postNews(data: THeForm , setProgress:React.Dispatch<React.SetStat
         /* 'Content-Type': 'multipart/form-data' , */
       },
       onUploadProgress: (e) => {
-
-        const progress = e.progress ;
-        if(progress) {
+        const progress = e.progress;
+        if (progress) {
           setProgress(progress * 100);
         }
-        console.log({progress:e.progress});
-      }
+      },
     })
     .catch((err) => {
       console.log({ err });

@@ -34,11 +34,18 @@ export default async function News() {
   );
 }
 
+/**
+ *
+ * @returns
+ */
+
 async function getNews() {
   const response = await fetch("http://localhost:3001/api/news", {
-    next: {
+    cache: "no-cache",
+
+    /* next: {
       revalidate: 60,
-    },
+    }, */
   });
 
   return (await response.json()) as {
