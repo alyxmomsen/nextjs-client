@@ -3,7 +3,7 @@
 import tailwindTemplates from "@/styles/taliwind-templates";
 import axios from "axios";
 import Image from "next/image";
-import { ReducerState, useEffect, useReducer, useState } from "react";
+import { ReducerState, Suspense, useEffect, useReducer, useState } from "react";
 
 const inputClassName =
   "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
@@ -26,31 +26,52 @@ export default function Registration() {
     initState,
   );
 
-  const [response, setResponse] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
-    console.log(localStorage);
-  }, [response]);
+
+    const access_token = localStorage.getItem('access_token');
+
+    if(access_token) {
+      checkIfauth(access_token).then(data => {
+
+        if(data.status) {
+          setIsAuth(true);
+        }
+        else {
+          setIsAuth(true);
+        }
+
+
+        console.log(data);
+      }).catch(err => {
+        console.log({err})
+      });
+    }
+
+
+    console.log(access_token);
+  }, [isAuth]);
 
   return (
     <div className="p-9">
-      <h2 className="text-4xl font-extrabold dark:text-white mb-9">
-        LOGIN FORM
-      </h2>
+        <h2 className="text-4xl font-extrabold dark:text-white mb-9">
+          LOGIN FORM
+        </h2>
       <div>
-        {response ? (
+        {isAuth ? (
           <button
             className={tailwindTemplates.button}
             onClick={() => {
               localStorage.clear();
-              setResponse(false);
+              setIsAuth(false);
             }}
           >
             LOGOUT
           </button>
         ) : null}
       </div>
-      {!response && (
+      {!isAuth && (
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -62,7 +83,7 @@ export default function Registration() {
                 );
               }
 
-              setResponse(response ? true : false);
+              setIsAuth(response ? true : false);
             });
           }}
         >
@@ -114,4 +135,19 @@ async function onSubmitHandler(formdata: formDataState) {
     });
 
   return resp0nse;
+}
+
+
+async function checkIfauth (token:string) {
+
+  const response = await axios.post<{status:boolean , message:string , payload:{
+    username:string
+  }}>('http://localhost:3001/api/auth' , {} , {
+    headers:{
+      Authorization:token ,
+    }
+  });
+
+  return response ;
+
 }

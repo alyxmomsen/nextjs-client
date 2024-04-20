@@ -3,6 +3,7 @@
 import axios from "axios";
 import Image from "next/image";
 import { ReducerState, useReducer, useState } from "react";
+import tailwindTemplates from "@/styles/taliwind-templates";
 
 const inputClassName =
   "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
@@ -29,19 +30,26 @@ export default function Registration() {
   );
 
   const [registrationStatus, setRegistrationStatus] = useState(false);
+  const [status , setStatus] = useState('');
 
   return (
     <div className="p-9">
+      {status}
       <h3 className="text-4xl font-extrabold dark:text-white mb-9">
         Registration
       </h3>
-      <div>{registrationStatus ? <span>ok</span> : null}</div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           onSubmitHandler({ ...state }).then((response) => {
 
-            const {status , message} = response?.data ;
+            console.log({response});
+
+
+            const {status , message} = response.data ;
+            
+
+            setStatus(message);
 
             setRegistrationStatus(status ? true : false);
             console.log({status , message});
@@ -77,7 +85,8 @@ export default function Registration() {
           type="password"
           value={state.password}
         />
-        <input type="submit" />
+        <br />
+        <button className={tailwindTemplates.button} type="submit">REGISTRATION</button>
       </form>
     </div>
   );
@@ -94,7 +103,10 @@ async function onSubmitHandler(formdata: formDataState) {
     })
     .catch((er) => {
       console.log({ er });
+      return {data:{status:false , message:er.response.data.message}}
     });
+
+    console.log({resp0nse});
 
   return resp0nse;
 }
