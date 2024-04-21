@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const NewsEditor = () => {
-  return (
-    <div>NewsEditor</div>
-  )
-}
+  return <div>NewsEditor</div>;
+};
 
-export default NewsEditor
+export default NewsEditor;

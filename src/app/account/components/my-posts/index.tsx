@@ -11,6 +11,7 @@ interface Post {
   _id: string;
   title: string;
   body: string;
+  image_url:string
 }
 
 const MyPosts = ({}) => {
@@ -33,7 +34,9 @@ const MyPosts = ({}) => {
     <div>
       <h2>MyPosts</h2>
       <div className={tailwindTemplates.wrapper}>
-        {posts.map((elem) => <NewsThumbNail data={elem} />)}
+        {posts.map((elem) => (
+          <NewsThumbNail data={elem} />
+        ))}
       </div>
     </div>
   );

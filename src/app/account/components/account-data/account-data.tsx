@@ -92,9 +92,7 @@ export default function AccountData() {
           )}
         </section>
       </section>
-      <footer>
-        
-      </footer>
+      <footer></footer>
     </div>
   );
 }

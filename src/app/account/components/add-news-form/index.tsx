@@ -66,7 +66,7 @@ export default function AddNewsForm() {
           setIsUploadFormActivated((current) => !current);
         }}
       >
-        {isUploadFormActivated ? "ROLL UP" : "ADD NEWS"}
+        {isUploadFormActivated ? "roll up".toUpperCase() : "add new post".toUpperCase()}
       </button>
       {isUploadFormActivated && (
         <form
@@ -184,8 +184,8 @@ async function postNews(
   formdata.append("date_to_post", data.date_to_post);
   if (file) {
     formdata.append("my--file", file);
-  } 
-  
+  }
+
   const response = await axios
     .post("http://localhost:3001/api/news", formdata, {
       headers: {

@@ -41,8 +41,7 @@ export default function Registration() {
         onSubmit={(e) => {
           e.preventDefault();
           onSubmitHandler({ ...state }).then((response) => {
-            
-            setStatusMsg(response.data.message) ;
+            setStatusMsg(response.data.message);
             setRegistrationStatus(response.status);
           });
         }}
@@ -85,76 +84,73 @@ export default function Registration() {
   );
 }
 
-
 /**
- * 
+ *
  * @param formdata - payload
- * @returns 
+ * @returns
  */
 
 async function onSubmitHandler(formdata: formDataState) {
-
   const data = formdata;
 
   try {
-    
-    const response = await axios
-      .post<{status:boolean , message:string , payload:null|any}>("http://www.localhost:3001/api/registration", {
-        username: data.name,
-        email: data.email,
-        password: data.password,
-      }) ;
+    const response = await axios.post<{
+      status: boolean;
+      message: string;
+      payload: null | any;
+    }>("http://www.localhost:3001/api/registration", {
+      username: data.name,
+      email: data.email,
+      password: data.password,
+    });
 
-      const {status , message , payload} = response.data ;
+    const { status, message, payload } = response.data;
 
-      return {
-        status ,
-        data:{
-          message ,
-          payload
-        } ,
-      } ;
-  }
-  catch (err) {
+    return {
+      status,
+      data: {
+        message,
+        payload,
+      },
+    };
+  } catch (err) {
+    if (
+      axios.isAxiosError<{
+        status: boolean;
+        message: string;
+        payload: null | any;
+      }>(err)
+    ) {
+      const response = err.response;
 
-    if(axios.isAxiosError<{status:boolean , message:string , payload:null|any}>(err)) {
-
-      
-
-      const response = err.response ;
-      
-      if(response) {
-
-        const data = response.data ;
-        const {status , message , payload} = data ;
+      if (response) {
+        const data = response.data;
+        const { status, message, payload } = data;
 
         return {
-          status , 
-          data:{
-            message ,
-            payload ,
-          }
-        }
-      }
-      else {
+          status,
+          data: {
+            message,
+            payload,
+          },
+        };
+      } else {
         return {
-          status:false , 
-          data:{
-            message:'unknown response error' ,
-            payload:null ,
-          }
-        }
-
+          status: false,
+          data: {
+            message: "unknown response error",
+            payload: null,
+          },
+        };
       }
-
     } else {
       return {
-        status:false ,
-        data:{
-          message:'unknown error' ,
-          payload:null ,
-        }
-      }
+        status: false,
+        data: {
+          message: "unknown error",
+          payload: null,
+        },
+      };
     }
   }
 }

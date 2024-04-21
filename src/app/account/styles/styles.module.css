@@ -1,16 +1,14 @@
-
-
 .wrapper {
-    display: flex;
-    justify-content: space-between;
-    gap: 9px;
+  display: flex;
+  justify-content: space-between;
+  gap: 9px;
 }
 
 .menuWrapper {
-    display: flex;
-    gap:9px ;
+  display: flex;
+  gap: 9px;
 }
 
 .menuWrapper div.current {
-    color:red ;
+  color: red;
 }
