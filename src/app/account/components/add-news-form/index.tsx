@@ -179,13 +179,13 @@ async function postNews(
 ) {
   const formdata = new FormData();
   const file = data.file;
+  formdata.append("title", data.title);
+  formdata.append("body", data.body);
+  formdata.append("date_to_post", data.date_to_post);
   if (file) {
     formdata.append("my--file", file);
-    formdata.append("title", data.title);
-    formdata.append("body", data.body);
-    formdata.append("date_to_post", data.date_to_post);
-  }
-
+  } 
+  
   const response = await axios
     .post("http://localhost:3001/api/news", formdata, {
       headers: {

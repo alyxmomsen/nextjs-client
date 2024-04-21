@@ -1,8 +1,7 @@
 "use client";
 
 import axios from "axios";
-import Image from "next/image";
-import { ReducerState, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 import tailwindTemplates from "@/styles/taliwind-templates";
 
 const inputClassName =
@@ -30,11 +29,11 @@ export default function Registration() {
   );
 
   const [registrationStatus, setRegistrationStatus] = useState(false);
-  const [status, setStatus] = useState("");
+  const [statusMsg, setStatusMsg] = useState("");
 
   return (
     <div className="p-9">
-      {status}
+      {statusMsg}
       <h3 className="text-4xl font-extrabold dark:text-white mb-9">
         Registration
       </h3>
@@ -42,14 +41,9 @@ export default function Registration() {
         onSubmit={(e) => {
           e.preventDefault();
           onSubmitHandler({ ...state }).then((response) => {
-            console.log({ response });
-
-            const { status, message } = response.data;
-
-            setStatus(message);
-
-            setRegistrationStatus(status ? true : false);
-            console.log({ status, message });
+            
+            setStatusMsg(response.data.message) ;
+            setRegistrationStatus(response.status);
           });
         }}
       >
@@ -91,21 +85,76 @@ export default function Registration() {
   );
 }
 
+
+/**
+ * 
+ * @param formdata - payload
+ * @returns 
+ */
+
 async function onSubmitHandler(formdata: formDataState) {
+
   const data = formdata;
 
-  const resp0nse = await axios
-    .post("http://www.localhost:3001/api/registration", {
-      username: data.name,
-      email: data.email,
-      password: data.password,
-    })
-    .catch((er) => {
-      console.log({ er });
-      return { data: { status: false, message: er.response.data.message } };
-    });
+  try {
+    
+    const response = await axios
+      .post<{status:boolean , message:string , payload:null|any}>("http://www.localhost:3001/api/registration", {
+        username: data.name,
+        email: data.email,
+        password: data.password,
+      }) ;
 
-  console.log({ resp0nse });
+      const {status , message , payload} = response.data ;
 
-  return resp0nse;
+      return {
+        status ,
+        data:{
+          message ,
+          payload
+        } ,
+      } ;
+  }
+  catch (err) {
+
+    if(axios.isAxiosError<{status:boolean , message:string , payload:null|any}>(err)) {
+
+      
+
+      const response = err.response ;
+      
+      if(response) {
+
+        const data = response.data ;
+        const {status , message , payload} = data ;
+
+        return {
+          status , 
+          data:{
+            message ,
+            payload ,
+          }
+        }
+      }
+      else {
+        return {
+          status:false , 
+          data:{
+            message:'unknown response error' ,
+            payload:null ,
+          }
+        }
+
+      }
+
+    } else {
+      return {
+        status:false ,
+        data:{
+          message:'unknown error' ,
+          payload:null ,
+        }
+      }
+    }
+  }
 }
